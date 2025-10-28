@@ -7,7 +7,7 @@ WORKDIR /app
 # Copiar archivos
 COPY requirements.txt .
 COPY main.py .
-COPY model_medical_insulrance.pkl .
+COPY model_medical_insurance.pkl .
 
 # Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt

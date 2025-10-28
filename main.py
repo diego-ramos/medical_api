@@ -3,12 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
 import joblib
-import statsmodels.api as sm
+#import statsmodels.api as sm
 
 # ----------------------------
 # Cargar el modelo entrenado
 # ----------------------------
-model = joblib.load("model_medical_insulrance.pkl")
+model = joblib.load("model_medical_insurance.pkl")
 
 # ----------------------------
 # Crear la app FastAPI
@@ -31,9 +31,7 @@ app.add_middleware(
 # ----------------------------
 class InputData(BaseModel):
     age: float
-    sex: int         # 0=female, 1=male
     bmi: float
-    children: int
     smoker: int      # 0=no, 1=yes
     region: int      # 0=northeast, 1=northwest, 2=southeast, 3=southwest
 
@@ -44,12 +42,6 @@ class InputData(BaseModel):
 def predict(data: InputData):
     # Convertir los datos a DataFrame
     X_input = pd.DataFrame([data.dict()])
-
-    # Agregar constante (como en el entrenamiento)
-    X_input = sm.add_constant(X_input, has_constant='add')
-
-    # Alinear columnas con las del modelo
-    X_input = X_input[model.model.exog_names]
 
     # Realizar predicción
     prediction = model.predict(X_input)[0]
